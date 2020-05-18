@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+        .profile {
+            display: block;
+            --diameter: 80px;
+            width: var(--diameter);
+            height: var(--diameter);
+            background-color: #fba;
+            border-radius: 50%;
+            
+        }
+        .round {
+            --diameter: 80vmin;
+            position: absolute;
+            width: var(--diameter);
+            height: var(--diameter);
+            top: calc((100vh - var(--diameter)) / 2);
+            left: calc((100vw - var(--diameter)) / 2);
+        }
+        .invisible {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <button id="addChild">Add child</button>
+    <button id="removeChild">Remove child</button>
+    <input type="checkbox" id="isMe">
+    <button id="removeMe">Remove me</button>
+    <button id="nextTurn">Next turn</button>
+    <div class="round"></div>
+    <script src="script.js" type="module"></script>
+</body>
+</html>
