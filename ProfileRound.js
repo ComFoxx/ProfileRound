@@ -1,21 +1,26 @@
 export default class ProfileRound {
     
     /**
-     * @type {Function}
+     * timeoutId used for the debounce
+     * 
+     * @type {number}
      */
     timer = null
 
     /**
+     * Profile marked "is me" that must be in the bottom center
+     * 
      * @type {Profile}
      */
     myProfile = null
 
     /**
+     * Create new ProfileRound object
      * 
-     * @param {HTMLElement} round
-     * @param {number} duration
-     * @param {Arrow} arrow
-     * @param {Array.<Profile>} profiles
+     * @param {HTMLElement} round The element container for the round
+     * @param {number} duration The duration in ms (/10 frames) for animations
+     * @param {Arrow} arrow Arrow object for pointing the active profile
+     * @param {Array.<Profile>} profiles Profiles to add to the round immediatly
      */
     constructor (round, duration = 400, arrow = null, profiles = []) {
         this.round = round
@@ -28,6 +33,7 @@ export default class ProfileRound {
     }
 
     /**
+     * Get profiles marked as invisible
      * 
      * @returns {Array.<Profile>}
      */
@@ -36,6 +42,7 @@ export default class ProfileRound {
     }
 
     /**
+     * Get profiles marked as visible
      * 
      * @returns {Array.<Profile>}
      */
@@ -44,8 +51,9 @@ export default class ProfileRound {
     }
 
     /**
+     * Set the profile active, add the class `active` to the element and point it with the arrow (if defined)
      * 
-     * @param {Profile} profile
+     * @param {Profile|undefined} profile The profile to set active or undefined to unset active profile
      */
     setActive (profile = undefined) {
         if (this.activeProfile !== undefined) this.activeProfile.element.classList.remove('active')
@@ -61,8 +69,9 @@ export default class ProfileRound {
     }
 
     /**
+     * Get the angle of a profile by its index
      * 
-     * @param {number} index
+     * @param {number} index Index of the profile in the profiles array
      * @returns {number}
      */
     getAngle (index) {
@@ -72,8 +81,9 @@ export default class ProfileRound {
     }
 
     /**
+     * Add a profile to the round
      * 
-     * @param {Profile} profile
+     * @param {Profile} profile Profile to add to the round
      */
     addProfile (profile) {
         const profilesVisibles = this.getVisibleProfiles().length
@@ -93,8 +103,9 @@ export default class ProfileRound {
     }
 
     /**
+     * Remove a profile in the round
      * 
-     * @param {Profile} profile
+     * @param {Profile} profile Profile to remove from the round
      */
     removeProfile (profile) {
         const removeElement = () => {
@@ -110,15 +121,16 @@ export default class ProfileRound {
     }
 
     /**
+     * Show each profiles
      * 
-     * @param {Profile} profiles
+     * @param {Array.<Profile>} profiles Profiles to show
      */
     showProfiles (profiles) {
         profiles.forEach(profile => profile.show(this.duration))
     }
 
     /**
-     * 
+     * Set the angles of the profiles in the round and animate them
      */
     align () {
         const addedProfiles = this.getInvisibleProfiles()

@@ -1,36 +1,50 @@
 export default class Profile {
 
     /**
+     * Current angle value
+     * 
      * @type {number}
      */
     currentAngle = 0
 
     /**
+     * Target angle value
+     * 
      * @type {number}
      */
     targetAngle = 0
 
     /**
+     * Value add to current angle for each animation frame
+     * 
      * @type {number}
      */
     angleAdd = 0
 
     /**
+     * Is the animation currently played
+     * 
      * @type {boolean}
      */
     animated = false
 
     /**
+     * Is the angle increase or decrease
+     * 
      * @type {boolean}
      */
     sens = false
 
     /**
+     * Is the profile has just been added
+     * 
      * @type {boolean}
      */
     added = true
 
     /**
+     * Function called at the end of animation
+     * 
      * @type {Function}
      */
     animationCallback = () => {}
@@ -39,12 +53,13 @@ export default class Profile {
     elementHeight = null
 
     /**
+     * Create new Profile object
      * 
-     * @param {Object} options
-     * @param {number} position
-     * @param {boolean} isMe
-     * @param {number} radiusPercent
-     * @param {boolean} visible
+     * @param {Object} options Options object passed to the createElement function
+     * @param {number} position Position of the profile in the round
+     * @param {boolean} isMe Does the profile must be in the bottom center
+     * @param {number} radiusPercent The radius of the round in percent
+     * @param {boolean} visible Is the profile visible
      */
     constructor (options = {}, position = NaN, isMe = false, radiusPercent = 45, visible = false) {
         this.options = options
@@ -57,12 +72,16 @@ export default class Profile {
     }
 
     /**
+     * Return the element corresponding to the Profile, must be modified by extending this class
      * 
-     * @param {Object} options
+     * @param {Object} options Options object passed by the constructor
      * @returns {HTMLElement}
      */
     createElement (options) {}
 
+    /**
+     * Set the elementWidth and elementHeight using the bounding client rect of the element
+     */
     setDimensions () {
         const bbox = this.element.getBoundingClientRect()
         this.elementWidth = bbox.width
@@ -70,8 +89,10 @@ export default class Profile {
     }
 
     /**
+     * Set the angles for the animation
      * 
-     * @param {number} steps
+     * @param {number} targetAngle Angle targeted by the animation
+     * @param {number} steps Number of animation frame before reaching the targeted angle
      */
     setMove (targetAngle, steps) {
         this.targetAngle = targetAngle
@@ -80,9 +101,10 @@ export default class Profile {
     }
 
     /**
+     * Animate the profile to make it visible (if it is not)
      * 
-     * @param {number} duration
-     * @param {function} callback
+     * @param {number} duration Duration in ms for the animation
+     * @param {function} callback Function called at animation's end
      */
     show (duration, callback = () => {}) {
         if (!this.visible) {
@@ -104,9 +126,10 @@ export default class Profile {
     }
 
     /**
+     * Animate the profile to make it invisible (if it is not)
      * 
-     * @param {number} duration
-     * @param {function} callback
+     * @param {number} duration Duration in ms for the animation
+     * @param {function} callback Function called at animation's end
      */
     hide (duration, callback = () => {}) {
         if (this.visible) {
@@ -128,9 +151,10 @@ export default class Profile {
     }
 
     /**
+     * Animate position of the profile using the angles
      * 
-     * @param {function} callback
-     * @param {boolean} keep
+     * @param {function} callback Function called at animation's end
+     * @param {boolean} keep Keep the function executing even if the animation is already in play (used for the animation frame)
      */
     anime (callback = () => {}, keep = false) {
         this.element.style.position = 'absolute'

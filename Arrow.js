@@ -1,16 +1,22 @@
 export default class Arrow {
 
     /**
+     * Current angle value
+     * 
      * @type {number}
      */
     currentAngle = 0
 
     /**
+     * Target angle value
+     * 
      * @type {number}
      */
     targetAngle = 0
 
     /**
+     * Value add to current angle for each animation frame
+     * 
      * @type {number}
      */
     angleAdd = 0
@@ -34,9 +40,11 @@ export default class Arrow {
     elementHeight = null
 
     /**
+     * Create new Arrow object
      * 
-     * @param {Object} options
-     * @param {boolean} visible
+     * @param {Object} options Options object passed to the createElement function
+     * @param {number} radiusPercent The radius of the round in percent
+     * @param {boolean} visible Is the profile visible
      */
     constructor (options = {}, radiusPercent = 30, visible = false) {
         this.options = options
@@ -47,12 +55,16 @@ export default class Arrow {
     }
 
     /**
+     * Return the element corresponding to the Arrow, must be modified by extending this class
      * 
-     * @param {Object} options
+     * @param {Object} options Options object passed by the constructor
      * @returns {HTMLElement}
      */
     createElement (options) {}
 
+    /**
+     * Set the elementWidth and elementHeight using the bounding client rect of the element
+     */
     setDimensions () {
         const bbox = this.element.getBoundingClientRect()
         this.elementWidth = bbox.width
@@ -60,8 +72,10 @@ export default class Arrow {
     }
 
     /**
+     * Set the angles for the animation
      * 
-     * @param {number} steps
+     * @param {number} targetAngle Angle targeted by the animation
+     * @param {number} steps Number of animation frame before reaching the targeted angle
      */
     setMove (targetAngle, steps) {
         this.targetAngle = targetAngle
@@ -71,9 +85,10 @@ export default class Arrow {
     }
 
     /**
+     * Animate the arrow to make it visible (if it is not)
      * 
-     * @param {number} duration
-     * @param {function} callback
+     * @param {number} duration Duration in ms for the animation
+     * @param {function} callback Function called at animation's end
      */
     show (duration, callback = () => {}) {
         if (!this.visible) {
@@ -95,9 +110,10 @@ export default class Arrow {
     }
 
     /**
+     * Animate the arrow to make it invisible (if it is not)
      * 
-     * @param {number} duration
-     * @param {function} callback
+     * @param {number} duration Duration in ms for the animation
+     * @param {function} callback Function called at animation's end
      */
     hide (duration, callback = () => {}) {
         if (this.visible) {
@@ -119,9 +135,10 @@ export default class Arrow {
     }
 
     /**
+     * Animate position of the arrow using the angles
      * 
-     * @param {function} callback
-     * @param {boolean} keep
+     * @param {function} callback Function called at animation's end
+     * @param {boolean} keep Keep the function executing even if the animation is already in play (used for the animation frame)
      */
     anime (callback = () => {}, keep = false) {
         this.element.style.position = 'absolute'
