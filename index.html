@@ -7,15 +7,15 @@
     <style>
         * {
             font-family: sans-serif;
+            box-sizing: border-box;
         }
         .profile {
             display: block;
             --diameter: 80px;
             width: var(--diameter);
             height: var(--diameter);
-            background-color: #fba;
+            background-color: #fab1a0;
             border-radius: 50%;
-            
         }
         .round {
             --diameter: 80vmin;
@@ -28,8 +28,11 @@
         .invisible {
             opacity: 0;
         }
+        .active .profile {
+            padding: 4px;
+        }
         .active {
-            background-color: red;
+            font-weight: bold;
         }
     </style>
 </head>

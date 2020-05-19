@@ -9,8 +9,7 @@ class MyProfile extends Profile {
         div.id = id
 
         const img = document.createElement('img')
-        if (id !== 800) img.src = "https://picsum.photos/seed/" + id + "/80/80"
-        else img.src = "https://via.placeholder.com/80/80"
+        img.src = "https://picsum.photos/seed/" + id + "/80/80"
         img.classList.add('profile')
         this.profileDiameter = '80px'
 
@@ -18,6 +17,7 @@ class MyProfile extends Profile {
         p.textContent = 'Bonjour'
         p.style.textAlign = 'center'
 
+        div.setAttribute('profilePosition', this.position + ' (used for debug)')
         div.appendChild(img)
         div.appendChild(p)
 
@@ -42,14 +42,14 @@ class MyArrow extends Arrow {
 
 const arrow = new MyArrow()
 const rounder = new ProfileRound(round, 400, arrow)
-/*
-for (let i = 0; i < 1; i++) {
-    rounder.addProfile(new MyProfile({id: i * 100}, i, i === 8))
-}*/
 
+for (let i = 0; i < 9; i++) {
+    rounder.addProfile(new MyProfile({id: i * 100}, i, i === 8))
+}
+/*
 rounder.addProfile(new MyProfile({id: 'aze'}, 0))
 rounder.addProfile(new MyProfile({id: 'azap'}, 1, true))
-
+*/
 const newChild = () => {
     rounder.addProfile(new MyProfile({id: Math.floor(Math.random() * (1000 - 1)) + 1}, Math.floor(Math.random() * rounder.profiles.length), document.getElementById('isMe').checked))
 }

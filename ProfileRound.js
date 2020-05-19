@@ -88,17 +88,19 @@ export default class ProfileRound {
     addProfile (profile) {
         const profilesVisibles = this.getVisibleProfiles().length
         if (profile.isMe) {
+            if (this.myProfile !== null) this.myProfile.isMe = false
             this.myProfile = profile
             this.profiles.forEach(eachProfile => { eachProfile.hide(this.duration, () => this.align())})
         }
         if (isNaN(profile.position)) {
-            profile.position = this.profiles.length
+            profile.position = this.profiles.length+1
             this.profiles.push(profile)
         } else {
             this.profiles.splice(profile.position, 0, profile)
         }
         const child = profile.element
-        this.round.appendChild(child)
+        const after = this.profiles.filter(eachProfile => this.round.contains(eachProfile.element)).find(eachProfile => eachProfile.position >= profile.position)
+        this.round.insertBefore(child, after !== undefined ? after.element : null)
         if (!profile.isMe || profilesVisibles < 2) this.align()
     }
 
