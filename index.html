@@ -28,14 +28,17 @@
         .invisible {
             opacity: 0;
         }
+        .active {
+            background-color: red;
+        }
     </style>
 </head>
 <body>
     <button id="addChild">Add child</button>
     <button id="removeChild">Remove child</button>
-    <input type="checkbox" id="isMe">
-    <button id="removeMe">Remove me</button>
+    <label for="isMe"><input type="checkbox" id="isMe">Child = MyProfile</label>
     <button id="nextTurn">Next turn</button>
+    <button id="removeTurn">Remove turn</button>
     <div class="round"></div>
     <script src="script.js" type="module"></script>
 </body>

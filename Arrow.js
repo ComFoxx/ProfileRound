@@ -1,4 +1,4 @@
-export default class Profile {
+export default class Arrow {
 
     /**
      * @type {number}
@@ -26,11 +26,6 @@ export default class Profile {
     sens = false
 
     /**
-     * @type {boolean}
-     */
-    added = true
-
-    /**
      * @type {Function}
      */
     animationCallback = () => {}
@@ -41,15 +36,10 @@ export default class Profile {
     /**
      * 
      * @param {Object} options
-     * @param {number} position
-     * @param {boolean} isMe
-     * @param {number} radiusPercent
      * @param {boolean} visible
      */
-    constructor (options = {}, position = NaN, isMe = false, radiusPercent = 45, visible = false) {
+    constructor (options = {}, radiusPercent = 30, visible = false) {
         this.options = options
-        this.position = position
-        this.isMe = isMe
         this.radiusPercent = radiusPercent
         this.visible = visible
         this.element = this.createElement(options)
@@ -75,6 +65,7 @@ export default class Profile {
      */
     setMove (targetAngle, steps) {
         this.targetAngle = targetAngle
+        if (this.currentAngle - this.targetAngle > Math.PI) this.targetAngle += Math.PI*2
         this.angleAdd = ((this.targetAngle - this.currentAngle) / steps) * (1+Math.pow(10, -7))
         this.sens = this.currentAngle > this.targetAngle
     }
@@ -139,16 +130,15 @@ export default class Profile {
         if (!this.animated || keep) {
             this.animated = true
             this.currentAngle += this.angleAdd
-            if (this.added) {
-                this.currentAngle = this.targetAngle
-                this.added = false
-            }
-            
+
             this.element.style.left = `calc(${this.radiusPercent * Math.sin(this.currentAngle) + 50}% - ${this.elementWidth / 2}px)`
-            this.element.style.top =  `calc(${this.radiusPercent * Math.cos(this.currentAngle) + 50}% - ${this.elementHeight / 2}px)`
+            this.element.style.top = `calc(${this.radiusPercent * Math.cos(this.currentAngle) + 50}% - ${this.elementHeight / 2}px)`
+            this.element.style.transform = `rotate(-${this.currentAngle}rad)`
             
             if ((this.sens ? this.currentAngle > this.targetAngle : this.currentAngle < this.targetAngle) && this.angleAdd !== 0) requestAnimationFrame(() => this.anime(this.animationCallback, true))
             else {
+                this.currentAngle = this.currentAngle % (Math.PI*2)
+                this.targetAngle = this.targetAngle % (Math.PI*2)
                 this.animated = false
                 this.animationCallback()
             }

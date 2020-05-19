@@ -13,11 +13,14 @@ export default class ProfileRound {
     /**
      * 
      * @param {HTMLElement} round
+     * @param {number} duration
+     * @param {Arrow} arrow
      * @param {Array.<Profile>} profiles
      */
-    constructor (round, duration = 400, profiles = []) {
+    constructor (round, duration = 400, arrow = null, profiles = []) {
         this.round = round
         this.duration = duration
+        this.arrow = arrow
         this.profiles = []
         profiles.forEach(profile => this.addProfile(profile))
         this.showProfiles(profiles)
@@ -42,6 +45,23 @@ export default class ProfileRound {
 
     /**
      * 
+     * @param {Profile} profile
+     */
+    setActive (profile = undefined) {
+        if (this.activeProfile !== undefined) this.activeProfile.element.classList.remove('active')
+        this.activeProfile = profile
+        if (this.activeProfile !== undefined) this.activeProfile.element.classList.add('active')
+        if (this.activeProfile !== undefined && this.arrow !== null) {
+            this.arrow.show()
+            this.arrow.setMove(this.activeProfile.targetAngle, this.duration / 20)
+            this.arrow.anime()
+        } else if (this.arrow !== null) {
+            this.arrow.hide()
+        }
+    }
+
+    /**
+     * 
      * @param {number} index
      * @returns {number}
      */
@@ -56,9 +76,10 @@ export default class ProfileRound {
      * @param {Profile} profile
      */
     addProfile (profile) {
+        const profilesVisibles = this.getVisibleProfiles().length
         if (profile.isMe) {
             this.myProfile = profile
-            this.profiles.forEach(theProfile => { theProfile.hide(this.duration, () => this.align())})
+            this.profiles.forEach(eachProfile => { eachProfile.hide(this.duration, () => this.align())})
         }
         if (isNaN(profile.position)) {
             profile.position = this.profiles.length
@@ -68,7 +89,7 @@ export default class ProfileRound {
         }
         const child = profile.element
         this.round.appendChild(child)
-        if (!profile.isMe || this.getVisibleProfiles().length <= 1) this.align()
+        if (!profile.isMe || profilesVisibles < 2) this.align()
     }
 
     /**
@@ -78,7 +99,7 @@ export default class ProfileRound {
     removeProfile (profile) {
         const removeElement = () => {
             this.round.removeChild(profile.element)
-            this.profiles.splice(this.profiles.findIndex(theProfile => theProfile === profile), 1)
+            this.profiles.splice(this.profiles.findIndex(eachProfile => eachProfile === profile), 1)
             this.align()
         }
         profile.hide(this.duration, removeElement)
@@ -102,13 +123,16 @@ export default class ProfileRound {
     align () {
         const addedProfiles = this.getInvisibleProfiles()
         this.profiles.forEach((profile, index) => {
-            profile.targetAngle = this.getAngle(index)
-            profile.setAngleAdd(this.duration / 10)
+            profile.setMove(this.getAngle(index), this.duration / 10)
             const animationEnd = () => {
                 if (profile.currentAngle !== profile.targetAngle || this.profiles.length <= 2) this.timer = setTimeout(() => this.showProfiles(addedProfiles), 2)
             }
             clearTimeout(this.timer)
             profile.anime(animationEnd)
+            if (profile === this.activeProfile && this.arrow !== null) {
+                this.arrow.setMove(this.getAngle(index), this.duration / 10)
+                this.arrow.anime()
+            }
         })
     }
 
